@@ -1,115 +1,25 @@
-
 <?php
-// Datos de ejemplo para representar la pantalla
-$id = 1;
-$nombre = "Pastel de fresa";
-$descripcion = "Pastel con fresas y crema";
-$precio = 76000;
-$stock = 10;
+require_once __DIR__ . "/../modelos/producto.php";
+$producto = new Producto();
+$productos = $producto->listar();
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar producto - Pasteleria Nancy</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #eee1f5;
-            color: #57285f;
-            padding: 30px;
-        }
-
-        .contenedor {
-            background: white;
-            max-width: 750px;
-            margin: auto;
-            padding: 30px;
-            border-radius: 12px;
-        }
-
-        h1, h2 {
-            color: #9e4e96;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #d9b6e8;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        button, .cancelar {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        button {
-            background: #9e4e96;
-            color: white;
-        }
-
-        .cancelar {
-            background: #ddd;
-            color: #57285f;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="contenedor">
-
-    <h1>Pasteleria Nancy</h1>
-
-    <h2>Gestion de productos</h2>
-
-    <h2>Editar producto</h2>
-
-    <form>
-
-        <label>ID del producto</label>
-        <input type="number" value="<?php echo $id; ?>" readonly>
-
-        <label>Nombre del producto</label>
-        <input type="text" value="<?php echo htmlspecialchars($nombre); ?>">
-
-        <label>Descripcion</label>
-        <textarea><?php echo htmlspecialchars($descripcion); ?></textarea>
-
-        <label>Precio</label>
-        <input type="number" value="<?php echo $precio; ?>">
-
-        <label>Stock disponible</label>
-        <input type="number" value="<?php echo $stock; ?>">
-
-        <button type="button">Actualizar producto</button>
-
-        <a href="registrar_productos.php" class="cancelar">
-            Cancelar
-        </a>
-
-    </form>
-
-</div>
-
-</body>
-</html>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Editar productos - Pastelería Nancy</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;background:#eee1f5;color:#57285f;margin:0;padding:28px}
+.contenedor{background:#fff;max-width:1000px;margin:20px auto;padding:30px;border-radius:14px;box-shadow:0 4px 14px #0001}
+h1,h2{color:#9e4e96}h1{text-align:center}
+a{color:#8e5ab7}.volver{display:inline-block;margin-bottom:12px}
+label{display:block;margin-top:14px;font-weight:bold}input,textarea{width:100%;padding:11px;border:1px solid #d9b6e8;border-radius:6px;margin-top:5px}
+button,.boton{display:inline-block;background:#9e4e96;color:white;border:0;padding:11px 18px;border-radius:6px;text-decoration:none;margin-top:16px;cursor:pointer}
+button:hover,.boton:hover{background:#824080}.secundario{background:#ddd;color:#57285f}
+table{width:100%;border-collapse:collapse;margin-top:20px}th{background:#9e4e96;color:white}th,td{border:1px solid #ddd;padding:10px;text-align:center}tr:nth-child(even){background:#faf5fc}
+.mensaje{padding:12px;background:#e7f5e9;border-radius:6px;margin:15px 0}
+.acciones{display:flex;gap:10px;flex-wrap:wrap}
+</style>
+</head><body><main class="contenedor">
+<a class="volver" href="inicio.php">← Volver al inicio</a><h1>Pastelería Nancy</h1><h2>Selecciona el producto que deseas editar</h2>
+<table><tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Acción</th></tr>
+<?php if($productos && $productos->num_rows): while($fila=$productos->fetch_assoc()): ?>
+<tr><td><?= (int)$fila['id_producto'] ?></td><td><?= htmlspecialchars($fila['nombre']) ?></td><td>$<?= number_format((float)$fila['precio'],0,',','.') ?></td><td><?= (int)$fila['stock'] ?></td><td><a href="../vistas/editar_producto.php?id=<?= (int)$fila['id_producto'] ?>">Editar producto</a></td></tr>
+<?php endwhile; else: ?><tr><td colspan="5">No hay productos registrados.</td></tr><?php endif; ?></table>
+</main></body></html>
